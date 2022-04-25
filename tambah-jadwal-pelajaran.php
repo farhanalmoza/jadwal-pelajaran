@@ -1,3 +1,36 @@
+<?php
+require 'functions.php';
+
+$guru = query("SELECT * FROM guru_pengajar");
+$mapel = query("SELECT * FROM mata_pelajaran");
+$ruang = query("SELECT * FROM ruang_kelas");
+$murid = query("SELECT * FROM murid");
+
+// cek submit
+if ( isset($_POST["submit"]) ) {
+  // ambil data dari form
+  $id_jadwal = $_POST["id_jadwal"];
+  $id_guru = $_POST["id_guru"];
+  $kode_mapel = $_POST["kode_mapel"];
+  $id_ruang = $_POST["id_ruang"];
+  $no_induk = $_POST["no_induk"];
+  $hari = $_POST["hari"];
+  $sesi = $_POST["sesi"];
+  $waktu_mulai = $_POST["waktu_mulai"];
+  $waktu_selesai = $_POST["waktu_selesai"];
+
+  // tambahkan datanya ke database
+  $query = "INSERT INTO jadwal_pelajaran
+            VALUES
+            ('$id_jadwal', '$id_guru', '$kode_mapel', '$id_ruang', '$no_induk', '$hari', '$sesi', '$waktu_mulai', '$waktu_selesai')
+            ";
+  query($query);
+
+  // cek data berhasil ditambahkan
+  
+}
+?>
+
 <!DOCTYPE html>
 <html
   lang="en"
@@ -14,7 +47,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Dashboard | Kelompok 2</title>
+    <title>Tambah Jadwal Pelajaran | Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -93,7 +126,7 @@
             </li>
 
             <!-- Jadwal Pelajaran -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Jadwal Pelajaran</div>
@@ -105,7 +138,7 @@
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
@@ -186,8 +219,7 @@
 
           <nav
             class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
+            id="layout-navbar">
             <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
               <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
                 <i class="bx bx-menu bx-sm"></i>
@@ -243,7 +275,112 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Tambah Jadwal Pelajaran</h4>
+
+              <!-- Form Tambah Jadwal Pelajaran -->
+              <div class="col-xxl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Form Tambah Jadwal Pelajaran</h5>
+                  </div>
+                  <div class="card-body">
+                    <form method="post" action="">
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id-jadwal">ID Jadwal</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="id-jadwal" name="id_jadwal" placeholder="JD001" />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-guru" class="col-sm-2 col-form-label">Guru Pengajar</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-guru" id="id-guru" name="id_guru" placeholder="Nama guru..." />
+                          <datalist id="daftar-guru">
+                            <?php foreach( $guru as $g ) : ?>
+                            <option value="<?= $g["ID_GURU"]; ?>"><?= $g["GELAR_DEPAN"] ." ". $g["NAMA_GURU"] ." ". $g["GELAR_BELAKANG"]; ?></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-mapel" class="col-sm-2 col-form-label">Mata Pelajaran</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-mapel" id="id-mapel" name="kode_mapel" placeholder="Mata pelajaran..." />
+                          <datalist id="daftar-mapel">
+                            <?php foreach( $mapel as $mp ) : ?>
+                            <option value="<?= $mp["KODE_MAPEL"]; ?>"><?= $mp["NAMA_MAPEL"]; ?></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-ruang" class="col-sm-2 col-form-label">Ruangan</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-ruang" id="id-ruang" name="id_ruang" placeholder="Ruangan..." />
+                          <datalist id="daftar-ruang">
+                            <?php foreach( $ruang as $r ) : ?>
+                            <option value="<?= $r["IDRUANG"]; ?>"><?= $r["NAMA_RUANG"]; ?></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="no-induk" class="col-sm-2 col-form-label">No Induk</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-murid" id="no-induk" name="no_induk" placeholder="Murid..." />
+                          <datalist id="daftar-murid">
+                            <?php foreach( $murid as $m ) : ?>
+                            <option value="<?= $m["NO_INDUK"]; ?>"></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="hari" class="col-sm-2 col-form-label">Hari</label>
+                        <div class="col-sm-10">
+                          <select class="form-select" id="hari" name="hari" aria-label="Default select example">
+                            <option selected>Pilih hari</option>
+                            <option value="senin">Senin</option>
+                            <option value="selasa">Selasa</option>
+                            <option value="rabu">Rabu</option>
+                            <option value="kamis">Kamis</option>
+                            <option value="jumat">Jumat</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="sesi" class="col-sm-2 col-form-label">Sesi</label>
+                        <div class="col-sm-10">
+                          <select class="form-select" id="sesi" name="sesi" aria-label="Default select example">
+                            <option selected>Pilih sesi</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="waktu-mulai">Waktu Mulai</label>
+                        <div class="col-sm-10">
+                          <input type="time" class="form-control" id="waktu-mulai" name="waktu_mulai" />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="waktu-selesai">Waktu Selesai</label>
+                        <div class="col-sm-10">
+                          <input type="time" class="form-control" id="waktu-selesai" name="waktu_selesai" />
+                        </div>
+                      </div>
+                      <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                          <button type="submit" name="submit" class="btn btn-primary">Tambah</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             </div>
             <!-- / Content -->
 
