@@ -78,7 +78,7 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
-            <a href="index.html" class="app-brand-link">
+            <a href="#" class="app-brand-link">
               <span class="app-brand-text demo menu-text fw-bolder ms-2">Kelompok 2</span>
             </a>
 
@@ -90,6 +90,27 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
           <div class="menu-inner-shadow"></div>
 
           <ul class="menu-inner py-1">
+            <!-- Guru Pengajar -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">Guru Pengajar</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
             <!-- Jadwal Pelajaran -->
             <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -105,6 +126,69 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
                 </li>
                 <li class="menu-item">
                   <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Mata Pelajaran -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">Mata Pelajaran</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Murid -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">Murid</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Ruang Kelas -->
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div data-i18n="Layouts">Ruang Kelas</div>
+              </a>
+
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
+                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="#" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
