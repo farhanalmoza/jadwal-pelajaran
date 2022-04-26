@@ -8,26 +8,8 @@ $murid = query("SELECT * FROM murid");
 
 // cek submit
 if ( isset($_POST["submit"]) ) {
-  // ambil data dari form
-  $id_jadwal = $_POST["id_jadwal"];
-  $id_guru = $_POST["id_guru"];
-  $kode_mapel = $_POST["kode_mapel"];
-  $id_ruang = $_POST["id_ruang"];
-  $no_induk = $_POST["no_induk"];
-  $hari = $_POST["hari"];
-  $sesi = $_POST["sesi"];
-  $waktu_mulai = $_POST["waktu_mulai"];
-  $waktu_selesai = $_POST["waktu_selesai"];
-
-  // tambahkan datanya ke database
-  $query = "INSERT INTO jadwal_pelajaran
-            VALUES
-            ('$id_jadwal', '$id_guru', '$kode_mapel', '$id_ruang', '$no_induk', '$hari', '$sesi', '$waktu_mulai', '$waktu_selesai')
-            ";
-  query($query);
-
   // cek data berhasil ditambahkan
-  if (mysqli_affected_rows($conn) > 0) {
+  if (tambahJadwalPelajaran($_POST) > 0) {
     $status = 'Data berhasil ditambahkan';
     $message = 'Data jadwal pelajaran telah berhasil ditambahkan ke dalam database';
     echo "<script>

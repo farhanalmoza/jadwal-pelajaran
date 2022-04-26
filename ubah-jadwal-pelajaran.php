@@ -1,6 +1,37 @@
 <?php
 require 'functions.php';
-$jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
+
+$guru = query("SELECT * FROM guru_pengajar");
+$mapel = query("SELECT * FROM mata_pelajaran");
+$ruang = query("SELECT * FROM ruang_kelas");
+$murid = query("SELECT * FROM murid");
+
+// ambil data id di url
+$id_jadwal = $_GET["id"];
+
+// query data berdasarkan id
+$jadwal = query("SELECT * FROM jadwal_pelajaran WHERE IDJADWAL = '$id_jadwal'")[0];
+
+// cek submit
+if ( isset($_POST["submit"]) ) {
+  // cek data berhasil diubah
+  if (ubahJadwalPelajaran($_POST) > 0) {
+    $status = 'Data berhasil diubah';
+    $message = 'Data jadwal pelajaran telah berhasil diubah ke dalam database';
+    echo "<script>
+            let selectedType = 'bg-success';
+            let toastPlacementShow = 1;
+          </script>";
+  } else {
+    $status = 'Data gagal diubah';
+    $message = mysqli_error($conn);
+    echo "<script>
+            let selectedType = 'bg-danger';
+            let toastPlacementShow = 1;
+          </script>";
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +50,7 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Daftar Jadwal Pelajaran | Kelompok 2</title>
+    <title>Ubah Jadwal Pelajaran | Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -98,14 +129,14 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
             </li>
 
             <!-- Jadwal Pelajaran -->
-            <li class="menu-item active open">
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Jadwal Pelajaran</div>
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item active">
+                <li class="menu-item">
                   <a href="http://localhost:8080/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
@@ -247,61 +278,121 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Daftar Jadwal Pelajaran</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Ubah Jadwal Pelajaran</h4>
 
-              <!-- Tabel jadwal pelajaran -->
-              <div class="card">
-                <h5 class="card-header">Daftar jadwal pelajaran</h5>
-                <div class="table-responsive text-nowrap">
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>ID Jadwal</th>
-                        <th>ID Guru</th>
-                        <th>ID Mapel</th>
-                        <th>ID Ruang</th>
-                        <th>NO Induk</th>
-                        <th>Hari</th>
-                        <th>Sesi</th>
-                        <th>Mulai</th>
-                        <th>Selesai</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                      <?php foreach($jadwal_mapel as $jadwal) : ?>
-                      <tr>
-                        <td><?= $jadwal["IDJADWAL"] ?></td>
-                        <td><?= $jadwal["ID_GURU"] ?></td>
-                        <td><?= $jadwal["KODE_MAPEL"] ?></td>
-                        <td><?= $jadwal["IDRUANG"] ?></td>
-                        <td><?= $jadwal["NO_INDUK"] ?></td>
-                        <td><?= $jadwal["HARIJADWAL"] ?></td>
-                        <td><?= $jadwal["SESIJADWAL"] ?></td>
-                        <td><?= $jadwal["WAKTU_MULAI"] ?></td>
-                        <td><?= $jadwal["WAKTU_SELESAI"] ?></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="./ubah-jadwal-pelajaran.php?id=<?= $jadwal["IDJADWAL"] ?>"
-                                ><i class="bx bx-edit-alt me-1"></i> Ubah</a
-                              >
-                              <a class="dropdown-item" href="./hapus-jadwal-pelajaran.php?id=<?= $jadwal["IDJADWAL"] ?>"
-                                ><i class="bx bx-trash me-1"></i> Hapus</a
-                              >
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <?php endforeach; ?>
-                    </tbody>
-                  </table>
+              <!-- Toast with Placements -->
+              <div class="bs-toast toast toast-placement-ex m-2" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+                <div class="toast-header">
+                  <i class="bx bx-bell me-2"></i>
+                  <div class="me-auto fw-semibold"><?= $status; ?></div>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body"><?= $message; ?></div>
+              </div>
+              <!-- Toast with Placements -->
+
+              <!-- Form Ubah Jadwal Pelajaran -->
+              <div class="col-xxl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Form Ubah Jadwal Pelajaran</h5>
+                  </div>
+                  <div class="card-body">
+                    <form method="post" action="">
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id-jadwal">ID Jadwal</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="id-jadwal" name="id_jadwal" readonly value="<?= $jadwal["IDJADWAL"]; ?>" />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-guru" class="col-sm-2 col-form-label">Guru Pengajar</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-guru" id="id-guru" name="id_guru" required value="<?= $jadwal["ID_GURU"] ?>" />
+                          <datalist id="daftar-guru">
+                            <?php foreach( $guru as $g ) : ?>
+                              <option value="<?= $g["ID_GURU"]; ?>"><?= $g["GELAR_DEPAN"] ." ". $g["NAMA_GURU"] ." ". $g["GELAR_BELAKANG"]; ?></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-mapel" class="col-sm-2 col-form-label">Mata Pelajaran</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-mapel" id="id-mapel" name="kode_mapel" required value="<?= $jadwal["KODE_MAPEL"] ?>" />
+                          <datalist id="daftar-mapel">
+                            <?php foreach( $mapel as $mp ) : ?>
+                            <option value="<?= $mp["KODE_MAPEL"]; ?>"><?= $mp["NAMA_MAPEL"]; ?></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-ruang" class="col-sm-2 col-form-label">Ruangan</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-ruang" id="id-ruang" name="id_ruang" required value="<?= $jadwal["IDRUANG"] ?>" />
+                          <datalist id="daftar-ruang">
+                            <?php foreach( $ruang as $r ) : ?>
+                            <option value="<?= $r["IDRUANG"]; ?>"><?= $r["NAMA_RUANG"]; ?></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="no-induk" class="col-sm-2 col-form-label">No Induk</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="daftar-murid" id="no-induk" name="no_induk" required value="<?= $jadwal["NO_INDUK"] ?>" />
+                          <datalist id="daftar-murid">
+                            <?php foreach( $murid as $m ) : ?>
+                            <option value="<?= $m["NO_INDUK"]; ?>"></option>
+                            <?php endforeach; ?>
+                          </datalist>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="hari" class="col-sm-2 col-form-label">Hari</label>
+                        <div class="col-sm-10">
+                          <select class="form-select" id="hari" name="hari" aria-label="Default select exampl requirede">
+                            <option value="senin" <?= $jadwal["HARIJADWAL"] == 'senin' ? 'selected' : '' ?> >Senin</option>
+                            <option value="selasa" <?= $jadwal["HARIJADWAL"] == 'selasa' ? 'selected' : '' ?> >Selasa</option>
+                            <option value="rabu" <?= $jadwal["HARIJADWAL"] == 'rabu' ? 'selected' : '' ?> >Rabu</option>
+                            <option value="kamis" <?= $jadwal["HARIJADWAL"] == 'kamis' ? 'selected' : '' ?> >Kamis</option>
+                            <option value="jumat" <?= $jadwal["HARIJADWAL"] == 'jumat' ? 'selected' : '' ?> >Jumat</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="sesi" class="col-sm-2 col-form-label">Sesi</label>
+                        <div class="col-sm-10">
+                          <select class="form-select" id="sesi" name="sesi" aria-label="Default select exampl requirede">
+                            <option value="1" <?= $jadwal["SESIJADWAL"] == '1' ? 'selected' : '' ?> >1</option>
+                            <option value="2" <?= $jadwal["SESIJADWAL"] == '2' ? 'selected' : '' ?> >2</option>
+                            <option value="3" <?= $jadwal["SESIJADWAL"] == '3' ? 'selected' : '' ?> >3</option>
+                            <option value="4" <?= $jadwal["SESIJADWAL"] == '4' ? 'selected' : '' ?> >4</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="waktu-mulai">Waktu Mulai</label>
+                        <div class="col-sm-10">
+                          <input type="time" class="form-control" id="waktu-mulai" name="waktu_mulai" required value="<?= $jadwal["WAKTU_MULAI"] ?>" />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="waktu-selesai">Waktu Selesai</label>
+                        <div class="col-sm-10">
+                          <input type="time" class="form-control" id="waktu-selesai" name="waktu_selesai" required value="<?= $jadwal["WAKTU_SELESAI"] ?>" />
+                        </div>
+                      </div>
+                      <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                          <button type="submit" name="submit" class="btn btn-primary">Ubah</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
-              <!--/ Hoverable Table rows -->
             </div>
             <!-- / Content -->
 
@@ -368,7 +459,7 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
     <script src="assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="assets/js/dashboards-analytics.js"></script>
+    <script src="assets/js/ui-toasts.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
