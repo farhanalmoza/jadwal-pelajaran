@@ -9,7 +9,7 @@
   // --------------------------------------------------------------------
   const toastPlacementExample = document.querySelector('.toast-placement-ex'),
     toastPlacementBtn = document.querySelector('#showToastPlacement');
-  let selectedType, selectedPlacement, toastPlacement;
+  let  toastPlacement;
 
   // Dispose toast when open another
   function toastDispose(toast) {
@@ -22,18 +22,14 @@
     }
   }
   // Placement Button click
-  if (toastPlacementBtn) {
-    toastPlacementBtn.onclick = function () {
-      if (toastPlacement) {
-        toastDispose(toastPlacement);
-      }
-      selectedType = document.querySelector('#selectTypeOpt').value;
-      selectedPlacement = document.querySelector('#selectPlacement').value.split(' ');
+  if (toastPlacementShow == 1) {
+    if (toastPlacement) {
+      toastDispose(toastPlacement);
+    }
 
-      toastPlacementExample.classList.add(selectedType);
-      DOMTokenList.prototype.add.apply(toastPlacementExample.classList, selectedPlacement);
-      toastPlacement = new bootstrap.Toast(toastPlacementExample);
-      toastPlacement.show();
-    };
+    toastPlacementExample.classList.add(selectedType);
+    DOMTokenList.prototype.add.apply(toastPlacementExample.classList, ['top-0', 'end-0']);
+    toastPlacement = new bootstrap.Toast(toastPlacementExample);
+    toastPlacement.show();
   }
 })();

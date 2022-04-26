@@ -27,7 +27,21 @@ if ( isset($_POST["submit"]) ) {
   query($query);
 
   // cek data berhasil ditambahkan
-  
+  if (mysqli_affected_rows($conn) > 0) {
+    $status = 'Data berhasil ditambahkan';
+    $message = 'Data jadwal pelajaran telah berhasil ditambahkan ke dalam database';
+    echo "<script>
+            let selectedType = 'bg-success';
+            let toastPlacementShow = 1;
+          </script>";
+  } else {
+    $status = 'Data gagal ditambahkan';
+    $message = mysqli_error($conn);
+    echo "<script>
+            let selectedType = 'bg-danger';
+            let toastPlacementShow = 1;
+          </script>";
+  }
 }
 ?>
 
@@ -277,6 +291,23 @@ if ( isset($_POST["submit"]) ) {
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Tambah Jadwal Pelajaran</h4>
 
+              <!-- Toast with Placements -->
+              <div
+                class="bs-toast toast toast-placement-ex m-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-delay="2000"
+              >
+                <div class="toast-header">
+                  <i class="bx bx-bell me-2"></i>
+                  <div class="me-auto fw-semibold"><?= $status; ?></div>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body"><?= $message; ?></div>
+              </div>
+              <!-- Toast with Placements -->
+
               <!-- Form Tambah Jadwal Pelajaran -->
               <div class="col-xxl">
                 <div class="card mb-4">
@@ -447,7 +478,7 @@ if ( isset($_POST["submit"]) ) {
     <script src="assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="assets/js/dashboards-analytics.js"></script>
+    <script src="assets/js/ui-toasts.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
