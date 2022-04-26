@@ -301,13 +301,13 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="id-jadwal">ID Jadwal</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="id-jadwal" name="id_jadwal" placeholder="JD001" />
+                          <input type="text" class="form-control" id="id-jadwal" name="id_jadwal" placeholder="JD001" required />
                         </div>
                       </div>
                       <div class="row mb-3">
                         <label for="id-guru" class="col-sm-2 col-form-label">Guru Pengajar</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="daftar-guru" id="id-guru" name="id_guru" placeholder="Nama guru..." />
+                          <input class="form-control" list="daftar-guru" id="id-guru" name="id_guru" placeholder="Nama guru..." required />
                           <datalist id="daftar-guru">
                             <?php foreach( $guru as $g ) : ?>
                             <option value="<?= $g["ID_GURU"]; ?>"><?= $g["GELAR_DEPAN"] ." ". $g["NAMA_GURU"] ." ". $g["GELAR_BELAKANG"]; ?></option>
@@ -318,7 +318,7 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label for="id-mapel" class="col-sm-2 col-form-label">Mata Pelajaran</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="daftar-mapel" id="id-mapel" name="kode_mapel" placeholder="Mata pelajaran..." />
+                          <input class="form-control" list="daftar-mapel" id="id-mapel" name="kode_mapel" placeholder="Mata pelajaran..." required />
                           <datalist id="daftar-mapel">
                             <?php foreach( $mapel as $mp ) : ?>
                             <option value="<?= $mp["KODE_MAPEL"]; ?>"><?= $mp["NAMA_MAPEL"]; ?></option>
@@ -329,7 +329,7 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label for="id-ruang" class="col-sm-2 col-form-label">Ruangan</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="daftar-ruang" id="id-ruang" name="id_ruang" placeholder="Ruangan..." />
+                          <input class="form-control" list="daftar-ruang" id="id-ruang" name="id_ruang" placeholder="Ruangan..." required />
                           <datalist id="daftar-ruang">
                             <?php foreach( $ruang as $r ) : ?>
                             <option value="<?= $r["IDRUANG"]; ?>"><?= $r["NAMA_RUANG"]; ?></option>
@@ -340,7 +340,7 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label for="no-induk" class="col-sm-2 col-form-label">No Induk</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="daftar-murid" id="no-induk" name="no_induk" placeholder="Murid..." />
+                          <input class="form-control" list="daftar-murid" id="no-induk" name="no_induk" placeholder="Murid..." required />
                           <datalist id="daftar-murid">
                             <?php foreach( $murid as $m ) : ?>
                             <option value="<?= $m["NO_INDUK"]; ?>"></option>
@@ -351,7 +351,7 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label for="hari" class="col-sm-2 col-form-label">Hari</label>
                         <div class="col-sm-10">
-                          <select class="form-select" id="hari" name="hari" aria-label="Default select example">
+                          <select class="form-select" id="hari" name="hari" aria-label="Default select exampl requirede">
                             <option selected>Pilih hari</option>
                             <option value="senin">Senin</option>
                             <option value="selasa">Selasa</option>
@@ -364,7 +364,7 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label for="sesi" class="col-sm-2 col-form-label">Sesi</label>
                         <div class="col-sm-10">
-                          <select class="form-select" id="sesi" name="sesi" aria-label="Default select example">
+                          <select class="form-select" id="sesi" name="sesi" aria-label="Default select exampl requirede">
                             <option selected>Pilih sesi</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -376,13 +376,13 @@ if ( isset($_POST["submit"]) ) {
                       <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="waktu-mulai">Waktu Mulai</label>
                         <div class="col-sm-10">
-                          <input type="time" class="form-control" id="waktu-mulai" name="waktu_mulai" />
+                          <input type="time" class="form-control" id="waktu-mulai" name="waktu_mulai" required />
                         </div>
                       </div>
                       <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="waktu-selesai">Waktu Selesai</label>
                         <div class="col-sm-10">
-                          <input type="time" class="form-control" id="waktu-selesai" name="waktu_selesai" />
+                          <input type="time" class="form-control" id="waktu-selesai" name="waktu_selesai" required />
                         </div>
                       </div>
                       <div class="row justify-content-end">

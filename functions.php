@@ -15,15 +15,15 @@ function query($query) {
 function tambahJadwalPelajaran($data) {
     global $conn;
 
-    $id_jadwal = $data["id_jadwal"];
-    $id_guru = $data["id_guru"];
-    $kode_mapel = $data["kode_mapel"];
-    $id_ruang = $data["id_ruang"];
-    $no_induk = $data["no_induk"];
-    $hari = $data["hari"];
-    $sesi = $data["sesi"];
-    $waktu_mulai = $data["waktu_mulai"];
-    $waktu_selesai = $data["waktu_selesai"];
+    $id_jadwal = htmlspecialchars($data["id_jadwal"]);
+    $id_guru = htmlspecialchars($data["id_guru"]);
+    $kode_mapel = htmlspecialchars($data["kode_mapel"]);
+    $id_ruang = htmlspecialchars($data["id_ruang"]);
+    $no_induk = htmlspecialchars($data["no_induk"]);
+    $hari = htmlspecialchars($data["hari"]);
+    $sesi = htmlspecialchars($data["sesi"]);
+    $waktu_mulai = htmlspecialchars($data["waktu_mulai"]);
+    $waktu_selesai = htmlspecialchars($data["waktu_selesai"]);
 
     // tambahkan datanya ke database
     $query = "INSERT INTO jadwal_pelajaran
@@ -38,15 +38,15 @@ function tambahJadwalPelajaran($data) {
 function ubahJadwalPelajaran($data) {
     global $conn;
 
-    $id_jadwal = $data["id_jadwal"];
-    $id_guru = $data["id_guru"];
-    $kode_mapel = $data["kode_mapel"];
-    $id_ruang = $data["id_ruang"];
-    $no_induk = $data["no_induk"];
-    $hari = $data["hari"];
-    $sesi = $data["sesi"];
-    $waktu_mulai = $data["waktu_mulai"];
-    $waktu_selesai = $data["waktu_selesai"];
+    $id_jadwal = htmlspecialchars($data["id_jadwal"]);
+    $id_guru = htmlspecialchars($data["id_guru"]);
+    $kode_mapel = htmlspecialchars($data["kode_mapel"]);
+    $id_ruang = htmlspecialchars($data["id_ruang"]);
+    $no_induk = htmlspecialchars($data["no_induk"]);
+    $hari = htmlspecialchars($data["hari"]);
+    $sesi = htmlspecialchars($data["sesi"]);
+    $waktu_mulai = htmlspecialchars($data["waktu_mulai"]);
+    $waktu_selesai = htmlspecialchars($data["waktu_selesai"]);
 
     // ubah datanya ke database
     $query = "UPDATE jadwal_pelajaran SET
@@ -60,6 +60,15 @@ function ubahJadwalPelajaran($data) {
                 WAKTU_SELESAI = '$waktu_selesai'
                 WHERE IDJADWAL = '$id_jadwal'
               ";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusJadwalPelajaran($id) {
+    global $conn;
+
+    $query = "DELETE FROM jadwal_pelajaran WHERE IDJADWAL = '$id'";
     query($query);
 
     return mysqli_affected_rows($conn);

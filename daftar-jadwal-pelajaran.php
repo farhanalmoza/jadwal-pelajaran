@@ -1,6 +1,34 @@
 <?php
 require 'functions.php';
 $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
+
+// hapus data
+$id_hapus = $_GET["hapus"];
+
+if (isset($id_hapus)) {
+  if ( hapusJadwalPelajaran($id_hapus) > 0 ) {
+    $status = 'Data berhasil dihapus';
+    $message = 'Data jadwal pelajaran telah berhasil dihapus di dalam database';
+    echo "<script>
+            let selectedType = 'bg-success';
+            let toastPlacementShow = 1;
+            setTimeout(
+              function() {document.location.href = 'daftar-jadwal-pelajaran.php';},
+            5000);
+          </script>";
+  } else {
+    $status = 'Data gagal dihapus';
+    $message = mysqli_error($conn);
+    echo "<script>
+            let selectedType = 'bg-danger';
+            let toastPlacementShow = 1;
+            setTimeout(
+              function() {document.location.href = 'daftar-jadwal-pelajaran.php';},
+            5000);
+          </script>";
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -249,6 +277,23 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
             <div class="container-xxl flex-grow-1 container-p-y">
               <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Daftar Jadwal Pelajaran</h4>
 
+              <!-- Toast with Placements -->
+              <div
+                class="bs-toast toast toast-placement-ex m-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-delay="2000"
+              >
+                <div class="toast-header">
+                  <i class="bx bx-bell me-2"></i>
+                  <div class="me-auto fw-semibold"><?= $status; ?></div>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body"><?= $message; ?></div>
+              </div>
+              <!-- Toast with Placements -->
+
               <!-- Tabel jadwal pelajaran -->
               <div class="card">
                 <h5 class="card-header">Daftar jadwal pelajaran</h5>
@@ -289,7 +334,7 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
                               <a class="dropdown-item" href="./ubah-jadwal-pelajaran.php?id=<?= $jadwal["IDJADWAL"] ?>"
                                 ><i class="bx bx-edit-alt me-1"></i> Ubah</a
                               >
-                              <a class="dropdown-item" href="./hapus-jadwal-pelajaran.php?id=<?= $jadwal["IDJADWAL"] ?>"
+                              <a class="dropdown-item" href="?hapus=<?= $jadwal["IDJADWAL"] ?>"
                                 ><i class="bx bx-trash me-1"></i> Hapus</a
                               >
                             </div>
@@ -368,7 +413,7 @@ $jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
     <script src="assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="assets/js/dashboards-analytics.js"></script>
+    <script src="assets/js/ui-toasts.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
