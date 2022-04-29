@@ -3,7 +3,7 @@
 $db_host = "localhost";
 $db_user = "root";
 $db_pass = "";
-$db_name = "user";
+$db_name = "jadwal_mapel";
 
 try {    
     //create PDO connection 

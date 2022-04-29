@@ -3,6 +3,7 @@
 require_once("config.php");
 
 if(isset($_POST['register'])){
+  var_dump($_POST);
 
     // filter data yang diinputkan
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
@@ -13,13 +14,12 @@ if(isset($_POST['register'])){
 
 
     // menyiapkan query
-    $sql = "INSERT INTO users (name, username, email, password) 
-            VALUES (:name, :username, :email, :password)";
+    $sql = "INSERT INTO users ( username, email, password) 
+            VALUES (:username, :email, :password)";
     $stmt = $db->prepare($sql);
 
     // bind parameter ke query
     $params = array(
-        ":name" => $name,
         ":username" => $username,
         ":password" => $password,
         ":email" => $email
@@ -53,7 +53,7 @@ if(isset($_POST['register'])){
     <title>Register Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
     <meta name="description" content="" />
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -93,7 +93,7 @@ if(isset($_POST['register'])){
                 </a>
               </div>
               <!-- /Logo -->
-              <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+              <form class="mb-3" method="POST">
                 <div class="mb-3">
                   <label for="username" class="form-label">Username</label>
                   <input
@@ -132,7 +132,7 @@ if(isset($_POST['register'])){
                     </label>
                   </div>
                 </div>
-                <button class="btn btn-primary d-grid w-100">Sign up</button>
+                <button class="btn btn-primary d-grid w-100" name="register" type="submit">Sign up</button>
               </form>
               <p class="text-center">
                 <span>Already have an account?</span>

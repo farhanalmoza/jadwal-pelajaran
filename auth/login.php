@@ -4,21 +4,21 @@ require_once("config.php");
 
 if(isset($_POST['login'])){
 
-    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
     $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
-    $sql = "SELECT * FROM users WHERE username=:username OR email=:email";
+    $sql = "SELECT * FROM users WHERE email=:email";
     $stmt = $db->prepare($sql);
     
     // bind parameter ke query
     $params = array(
-        ":username" => $username,
-        ":email" => $username
+        ":email" => $email
     );
 
     $stmt->execute($params);
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    var_dump($user);
 
     // jika user terdaftar
     if($user){
@@ -28,7 +28,7 @@ if(isset($_POST['login'])){
             session_start();
             $_SESSION["user"] = $user;
             // login sukses, alihkan ke halaman timeline
-            header("Location: timeline.php");
+            header("Location: ../daftar-jadwal-pelajaran.php");
         }
     }
 }
@@ -36,17 +36,6 @@ if(isset($_POST['login'])){
 
 
 <!DOCTYPE html>
-
-<!-- =========================================================
-* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
-==============================================================
-* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
-* Created by: ThemeSelection
-* License: You must have a valid license purchased in order to legally use the theme for your project.
-* Copyright ThemeSelection (https://themeselection.com)
-=========================================================
- -->
-<!-- beautify ignore:start -->
 <html
   lang="en"
   class="light-style customizer-hide"
@@ -64,7 +53,7 @@ if(isset($_POST['login'])){
     <title>Login Basic - Pages | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
     <meta name="description" content="" />
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -104,15 +93,15 @@ if(isset($_POST['login'])){
                 </a>
               </div>
               <!-- /Logo -->
-              <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+              <form class="mb-3" method="POST">
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email or Username</label>
+                  <label for="email" class="form-label">Email</label>
                   <input
                     type="text"
                     class="form-control"
                     id="email"
-                    name="email-username"
-                    placeholder="Enter your email or username"
+                    name="email"
+                    placeholder="Enter your email"
                     autofocus
                   />
                 </div>
@@ -139,7 +128,7 @@ if(isset($_POST['login'])){
                   </div>
                 </div>
                 <div class="mb-3">
-                  <button class="btn btn-primary d-grid w-100" type="submit">Sign in</button>
+                  <button class="btn btn-primary d-grid w-100" type="submit" name="login">Sign in</button>
                 </div>
               </form>
               <p class="text-center">
