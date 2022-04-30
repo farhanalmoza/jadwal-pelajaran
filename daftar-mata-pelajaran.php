@@ -13,7 +13,7 @@ if (isset($id_hapus)) {
             let selectedType = 'bg-success';
             let toastPlacementShow = 1;
             setTimeout(
-              function() {document.location.href = 'daftar-jadwal-pelajaran.php';},
+              function() {document.location.href = 'daftar-mata-pelajaran.php';},
             5000);
           </script>";
   } else {
@@ -23,7 +23,7 @@ if (isset($id_hapus)) {
             let selectedType = 'bg-danger';
             let toastPlacementShow = 1;
             setTimeout(
-              function() {document.location.href = 'daftar-jadwal-pelajaran.php';},
+              function() {document.location.href = 'daftar-mata-pelajaran.php';},
             5000);
           </script>";
   }
@@ -326,7 +326,7 @@ if (isset($id_hapus)) {
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="./ubah-mata-pelajaran.php?id=<?= $mapel["KodeMapel"] ?>"
+                              <a class="dropdown-item" href="./ubah-mata-pelajaran.php?id=<?= $mapel["KODE_MAPEL"] ?>"
                                 ><i class="bx bx-edit-alt me-1"></i> Ubah</a
                               >
                               <a class="dropdown-item" href="?hapus=<?= $mapel["KODE_MAPEL"] ?>"
