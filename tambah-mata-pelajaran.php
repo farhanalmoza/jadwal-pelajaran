@@ -130,12 +130,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item active">
-                  <a href="http://localhost:/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                <li class="menu-item">
+                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -151,12 +151,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar mata pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item active">
-                  <a href="http://localhost/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah mata pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -335,7 +335,7 @@ if ( isset($_POST["submit"]) ) {
                         <div class="col-sm-10">
                           <input type="number" class="form-control" id="JumlahPertemuan" name="JumlahPertemuan" required />
                         </div>
-                      
+                      </div>
                       
                       <div class="row mb-3">
                         <label class="col-sm-2 col-form-label" for="DurasiMapel">Durasi Mapel</label>

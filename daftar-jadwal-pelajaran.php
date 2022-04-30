@@ -134,12 +134,12 @@ if (isset($id_hapus)) {
 
               <ul class="menu-sub">
                 <li class="menu-item active">
-                  <a href="http://localhost:/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -155,12 +155,12 @@ if (isset($id_hapus)) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="http://localhost/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
