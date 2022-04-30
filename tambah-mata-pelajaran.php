@@ -1,34 +1,30 @@
 <?php
 require 'functions.php';
-$jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
 
-// hapus data
-$id_hapus = $_GET["hapus"];
+$guru = query("SELECT * FROM guru_pengajar");
+$mapel = query("SELECT * FROM mata_pelajaran");
+$ruang = query("SELECT * FROM ruang_kelas");
+$murid = query("SELECT * FROM murid");
 
-if (isset($id_hapus)) {
-  if ( hapusJadwalPelajaran($id_hapus) > 0 ) {
-    $status = 'Data berhasil dihapus';
-    $message = 'Data jadwal pelajaran telah berhasil dihapus di dalam database';
+// cek submit
+if ( isset($_POST["submit"]) ) {
+  // cek data berhasil ditambahkan
+  if (tambahMataPelajaran($_POST) > 0) {
+    $status = 'Data berhasil ditambahkan';
+    $message = 'Mata pelajaran telah berhasil ditambahkan ke dalam database';
     echo "<script>
             let selectedType = 'bg-success';
             let toastPlacementShow = 1;
-            setTimeout(
-              function() {document.location.href = 'daftar-jadwal-pelajaran.php';},
-            5000);
           </script>";
   } else {
-    $status = 'Data gagal dihapus';
+    $status = 'Data gagal ditambahkan';
     $message = mysqli_error($conn);
     echo "<script>
             let selectedType = 'bg-danger';
             let toastPlacementShow = 1;
-            setTimeout(
-              function() {document.location.href = 'daftar-jadwal-pelajaran.php';},
-            5000);
           </script>";
   }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +43,7 @@ if (isset($id_hapus)) {
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Daftar Jadwal Pelajaran | Kelompok 2</title>
+    <title>Tambah Mata Pelajaran | Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -126,19 +122,19 @@ if (isset($id_hapus)) {
             </li>
 
             <!-- Jadwal Pelajaran -->
-            <li class="menu-item active open">
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Jadwal Pelajaran</div>
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item active">
+                <li class="menu-item">
                   <a href="http://localhost:/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="http://localhost:/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
@@ -147,7 +143,7 @@ if (isset($id_hapus)) {
             </li>
 
             <!-- Mata Pelajaran -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Mata Pelajaran</div>
@@ -156,12 +152,12 @@ if (isset($id_hapus)) {
               <ul class="menu-sub">
                 <li class="menu-item">
                   <a href="http://localhost/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                    <div data-i18n="Daftar mata pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="http://localhost/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                    <div data-i18n="Tambah mata pelajaran">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -275,7 +271,7 @@ if (isset($id_hapus)) {
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Daftar Jadwal Pelajaran</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Mata Pelajaran /</span> Tambah Mata Pelajaran</h4>
 
               <!-- Toast with Placements -->
               <div
@@ -294,59 +290,69 @@ if (isset($id_hapus)) {
               </div>
               <!-- Toast with Placements -->
 
-              <!-- Tabel jadwal pelajaran -->
-              <div class="card">
-                <h5 class="card-header">Daftar jadwal pelajaran</h5>
-                <div class="table-responsive text-nowrap">
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th>ID Jadwal</th>
-                        <th>ID Guru</th>
-                        <th>ID Mapel</th>
-                        <th>ID Ruang</th>
-                        <th>NO Induk</th>
-                        <th>Hari</th>
-                        <th>Sesi</th>
-                        <th>Mulai</th>
-                        <th>Selesai</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody class="table-border-bottom-0">
-                      <?php foreach($jadwal_mapel as $jadwal) : ?>
-                      <tr>
-                        <td><?= $jadwal["IDJADWAL"] ?></td>
-                        <td><?= $jadwal["ID_GURU"] ?></td>
-                        <td><?= $jadwal["KODE_MAPEL"] ?></td>
-                        <td><?= $jadwal["IDRUANG"] ?></td>
-                        <td><?= $jadwal["NO_INDUK"] ?></td>
-                        <td><?= $jadwal["HARIJADWAL"] ?></td>
-                        <td><?= $jadwal["SESIJADWAL"] ?></td>
-                        <td><?= $jadwal["WAKTU_MULAI"] ?></td>
-                        <td><?= $jadwal["WAKTU_SELESAI"] ?></td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="./ubah-jadwal-pelajaran.php?id=<?= $jadwal["IDJADWAL"] ?>"
-                                ><i class="bx bx-edit-alt me-1"></i> Ubah</a
-                              >
-                              <a class="dropdown-item" href="?hapus=<?= $jadwal["IDJADWAL"] ?>"
-                                ><i class="bx bx-trash me-1"></i> Hapus</a
-                              >
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      <?php endforeach; ?>
-                    </tbody>
-                  </table>
+              <!-- Form Tambah Mata Pelajaran -->
+              <div class="col-xxl">
+                <div class="card mb-4">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Form Tambah Mata Pelajaran</h5>
+                  </div>
+                  <div class="card-body">
+                    <form method="post" action="">
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="KodeMapel">Kode Mapel</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="KodeMapel" name="KodeMapel" placeholder="MP001" required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-NamaMapel" class="col-sm-2 col-form-label">Nama Mapel</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id-NamaMapel" name="id_NamaMapel" placeholder="Nama mapel..." required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="BidangMapel" class="col-sm-2 col-form-label">Bidang Mata Pelajaran</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="BidangMapel" id="BidangMapel" name="BidangMapel" placeholder="Bidang Mata pelajaran..." required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="id-JenisMapel" class="col-sm-2 col-form-label">Jenis Mapel</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="id-JenisMapel" id="id-JenisMapel" name="id_JenisMapel" placeholder="Jenis Mata Pelajaran..." required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="TipeMapel" class="col-sm-2 col-form-label">Tipe Mapel</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" list="TipeMapel" id="TipeMapel" name="TipeMapel" placeholder="Tipe Mata Pelajaran..." required />
+                
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="JumlahPertemuan">Jumlah Pertemuan</label>
+                        <div class="col-sm-10">
+                          <input type="number" class="form-control" id="JumlahPertemuan" name="JumlahPertemuan" required />
+                        </div>
+                      
+                      
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="DurasiMapel">Durasi Mapel</label>
+                        <div class="col-sm-10">
+                          <input type="number" class="form-control" id="DurasiMapel" name="DurasiMapel" placeholder= "Durasi Mata Pelajaran /jam"required />
+                        </div>
+                      </div>
+                  
+                      <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                          <button type="submit" name="submit" class="btn btn-primary">Tambah</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
-              <!--/ Hoverable Table rows -->
             </div>
             <!-- / Content -->
 

@@ -1,14 +1,14 @@
 <?php
 require 'functions.php';
-$jadwal_mapel = query("SELECT * FROM jadwal_pelajaran");
+$mapel = query("SELECT * FROM mata_pelajaran");
 
 // hapus data
 $id_hapus = $_GET["hapus"];
 
 if (isset($id_hapus)) {
-  if ( hapusJadwalPelajaran($id_hapus) > 0 ) {
+  if ( hapusMataPelajaran($id_hapus) > 0 ) {
     $status = 'Data berhasil dihapus';
-    $message = 'Data jadwal pelajaran telah berhasil dihapus di dalam database';
+    $message = 'Data mata pelajaran telah berhasil dihapus di dalam database';
     echo "<script>
             let selectedType = 'bg-success';
             let toastPlacementShow = 1;
@@ -47,7 +47,7 @@ if (isset($id_hapus)) {
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Daftar Jadwal Pelajaran | Kelompok 2</title>
+    <title>Daftar Mata Pelajaran | Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -126,20 +126,20 @@ if (isset($id_hapus)) {
             </li>
 
             <!-- Jadwal Pelajaran -->
-            <li class="menu-item active open">
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Jadwal Pelajaran</div>
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item active">
-                  <a href="http://localhost:/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
+                <li class="menu-item">
+                  <a href="http://localhost://jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost://jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -147,21 +147,21 @@ if (isset($id_hapus)) {
             </li>
 
             <!-- Mata Pelajaran -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Mata Pelajaran</div>
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="http://localhost/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                    <div data-i18n="Daftar Mata pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
                   <a href="http://localhost/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                    <div data-i18n="Tambah Mata pelajaran">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -275,7 +275,7 @@ if (isset($id_hapus)) {
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Jadwal Pelajaran /</span> Daftar Jadwal Pelajaran</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Mata Pelajaran /</span> Daftar Mata Pelajaran</h4>
 
               <!-- Toast with Placements -->
               <div
@@ -294,47 +294,42 @@ if (isset($id_hapus)) {
               </div>
               <!-- Toast with Placements -->
 
-              <!-- Tabel jadwal pelajaran -->
+              <!-- Tabel mata pelajaran -->
               <div class="card">
-                <h5 class="card-header">Daftar jadwal pelajaran</h5>
+                <h5 class="card-header">Daftar mata pelajaran</h5>
                 <div class="table-responsive text-nowrap">
                   <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th>ID Jadwal</th>
-                        <th>ID Guru</th>
-                        <th>ID Mapel</th>
-                        <th>ID Ruang</th>
-                        <th>NO Induk</th>
-                        <th>Hari</th>
-                        <th>Sesi</th>
-                        <th>Mulai</th>
-                        <th>Selesai</th>
-                        <th>Status</th>
+                        <th>KODE_MAPEL</th>
+                        <th>NAMA_MAPEL</th>
+                        <th>BIDANG_MAPEL</th>
+                        <th>JENIS_MAPEL</th>
+                        <th>TIPE_MAPEL</th>
+                        <th>JUMLAH_PERTEMUAN</th>
+                        <th>DURASI_MAPEL</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                      <?php foreach($jadwal_mapel as $jadwal) : ?>
+                      <?php foreach($mapel as $mapel) : ?>
                       <tr>
-                        <td><?= $jadwal["IDJADWAL"] ?></td>
-                        <td><?= $jadwal["ID_GURU"] ?></td>
-                        <td><?= $jadwal["KODE_MAPEL"] ?></td>
-                        <td><?= $jadwal["IDRUANG"] ?></td>
-                        <td><?= $jadwal["NO_INDUK"] ?></td>
-                        <td><?= $jadwal["HARIJADWAL"] ?></td>
-                        <td><?= $jadwal["SESIJADWAL"] ?></td>
-                        <td><?= $jadwal["WAKTU_MULAI"] ?></td>
-                        <td><?= $jadwal["WAKTU_SELESAI"] ?></td>
+                        <td><?= $mapel["KODE_MAPEL"] ?></td>
+                        <td><?= $mapel["NAMA_MAPEL"] ?></td>
+                        <td><?= $mapel["BIDANG_MAPEL"] ?></td>
+                        <td><?= $mapel["JENIS_MAPEL"] ?></td>
+                        <td><?= $mapel["TIPE_MAPEL"] ?></td>
+                        <td><?= $mapel["JUMLAH_PERTEMUAN"] ?></td>
+                        <td><?= $mapel["DURASI_MAPEL"] ?></td>
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="./ubah-jadwal-pelajaran.php?id=<?= $jadwal["IDJADWAL"] ?>"
+                              <a class="dropdown-item" href="./ubah-mata-pelajaran.php?id=<?= $mapel["KodeMapel"] ?>"
                                 ><i class="bx bx-edit-alt me-1"></i> Ubah</a
                               >
-                              <a class="dropdown-item" href="?hapus=<?= $jadwal["IDJADWAL"] ?>"
+                              <a class="dropdown-item" href="?hapus=<?= $mapel["KODE_MAPEL"] ?>"
                                 ><i class="bx bx-trash me-1"></i> Hapus</a
                               >
                             </div>

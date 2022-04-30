@@ -9,8 +9,7 @@ function query($query) {
     while( $row = mysqli_fetch_assoc($result) ) {
         $rows[] = $row;
     }
-    return $rows;
-}
+    return $rows;}
 
 function tambahJadwalPelajaran($data) {
     global $conn;
@@ -69,6 +68,62 @@ function hapusJadwalPelajaran($id) {
     global $conn;
 
     $query = "DELETE FROM jadwal_pelajaran WHERE IDJADWAL = '$id'";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahMataPelajaran($data) {
+    global $conn;
+
+    $KodeMapel = htmlspecialchars($data["KodeMapel"]);
+    $id_NamaMapel = htmlspecialchars($data["id_NamaMapel"]);
+    $BidangMapel = htmlspecialchars($data["BidangMapel"]);
+    $id_JenisMapel = htmlspecialchars($data["id_JenisMapel"]);
+    $TipeMapel = htmlspecialchars($data["TipeMapel"]);
+    $JumlahPertemuan = htmlspecialchars($data["JumlahPertemuan"]);
+    $DurasiMapel = htmlspecialchars($data["DurasiMapel"]);
+
+    // tambahkan datanya ke database
+    $query = "INSERT INTO mata_pelajaran
+                VALUES
+              ('$KodeMapel', '$id_NamaMapel', '$BidangMapel', '$id_JenisMapel', '$TipeMapel', '$JumlahPertemuan', '$DurasiMapel')
+              ";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahMataPelajaran($data) {
+    global $conn;
+
+    $KodeMapel = htmlspecialchars($data["KodeMapel"]);
+    $id_NamaMapel = htmlspecialchars($data["id_NamaMapel"]);
+    $BidangMapel = htmlspecialchars($data["BidangMapel"]);
+    $id_JenisMapel = htmlspecialchars($data["id_JenisMapel"]);
+    $TipeMapel = htmlspecialchars($data["TipeMapel"]);
+    $JumlahPertemuan = htmlspecialchars($data["JumlahPertemuan"]);
+    $DurasiMapel = htmlspecialchars($data["DurasiMapel"]);
+
+    // ubah datanya ke database
+    $query = "UPDATE mata_pelajaran SET
+                NAMA_MAPEL = '$id_NamaMapel',
+                BIDANG_MAPEL = '$BidangMapel',
+                JENIS_MAPEL = '$id_JenisMapel',
+                TIPE_MAPEL = '$TipeMapel',
+                JUMLAH_PERTEMUAN = '$JumlahPertemuan',
+                DURASI_MAPEL = '$DurasiMapel',
+                WHERE KODE_MAPEL = '$KodeMapel'
+              ";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusMataPelajaran($KodeMapel) {
+    global $conn;
+
+    $query = "DELETE FROM mata_pelajaran WHERE KODE_MAPEL = '$KodeMapel'";
     query($query);
 
     return mysqli_affected_rows($conn);
