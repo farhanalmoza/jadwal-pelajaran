@@ -158,12 +158,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar mata pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah mata pelajaran">Tambah</div>
                   </a>
                 </li>
