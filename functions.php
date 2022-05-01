@@ -129,4 +129,110 @@ function hapusMataPelajaran($KodeMapel) {
     return mysqli_affected_rows($conn);
 }
 
+function tambahMurid($data) {
+    global $conn;
+
+    $no_induk = htmlspecialchars($data["no_induk"]);
+    $nama_murid = htmlspecialchars($data["nama_murid"]);
+    $jen_kel = htmlspecialchars($data["jen_kel"]);
+    $agama_murid = htmlspecialchars($data["agama_murid"]);
+    $alamat_rumah = htmlspecialchars($data["alamat_rumah"]);
+    $tempat_lahir = htmlspecialchars($data["tempat_lahir"]);
+    $tanggal_lahir = htmlspecialchars($data["tanggal_lahir"]);
+    $email_murid = htmlspecialchars($data["email_murid"]);
+    $no_hp = htmlspecialchars($data["no_hp"]);
+    $no_wa = htmlspecialchars($data["no_wa"]);
+    $id_telegram = htmlspecialchars($data["id_telegram"]);
+    $id_line = htmlspecialchars($data["id_line"]);
+    $id_facebook = htmlspecialchars($data["id_facebook"]);
+    $id_instagram = htmlspecialchars($data["id_instagram"]);
+    $id_twitter = htmlspecialchars($data["id_twitter"]);
+    $id_youtube = htmlspecialchars($data["id_youtube"]);
+
+    // tambahkan datanya ke database
+    $query = "INSERT INTO mata_pelajaran
+                VALUES
+              ('$no_induk', '$nama_murid', '$jen_kel', '$agama_murid', '$alamat_rumah', '$tempat_lahir', '$tanggal_lahir', '$email_murid', '$no_hp',
+              '$no_wa', '$id_telegram','$id_line','$id_facebook','$id_instagram', '$id_twitter', '$id_youtube',)
+              ";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubahMurid($data) {
+    global $conn;
+
+    $no_induk = htmlspecialchars($data["no_induk"]);
+    $nama_murid = htmlspecialchars($data["nama_murid"]);
+    $jen_kel = htmlspecialchars($data["jen_kel"]);
+    $agama_murid = htmlspecialchars($data["agama_murid"]);
+    $alamat_rumah = htmlspecialchars($data["alamat_rumah"]);
+    $tempat_lahir = htmlspecialchars($data["tempat_lahir"]);
+    $tanggal_lahir = htmlspecialchars($data["tanggal_lahir"]);
+    $email_murid = htmlspecialchars($data["email_murid"]);
+    $no_hp = htmlspecialchars($data["no_hp"]);
+    $no_wa = htmlspecialchars($data["no_wa"]);
+    $id_telegram = htmlspecialchars($data["id_telegram"]);
+    $id_line = htmlspecialchars($data["id_line"]);
+    $id_facebook = htmlspecialchars($data["id_facebook"]);
+    $id_instagram = htmlspecialchars($data["id_instagram"]);
+    $id_twitter = htmlspecialchars($data["id_twitter"]);
+    $id_youtube = htmlspecialchars($data["id_youtube"]);
+    
+    // ubah datanya ke database
+    $query = "UPDATE murid SET
+            NAMA_MURID = '$nama_murid',           
+            JEN_KEL  = '$jen_kel',            
+            AGAMA_MURID = '$agama_murid',          
+            ALAMAT_RUMAH = '$alamat_rumah',          
+            TEMPATLAHIR = '$tempat_lahir',         
+            TGL_LAHIR = '$tanggal_lahir',           
+            EMAIL_MURID = '$email_murid',        
+            NOHP = '$no_hp',               
+            NOWA = '$no_wa',                
+            IDTELEGRAM = '$id_telegram',      
+            IDLINE = '$id_line',        
+            IDFACEBOOK  = '$id_facebook',         
+            IDINSTAGRAM = '$id_instagram',         
+            IDTWITTER  ='$id_twitter',           
+            IDYOUTUBE = '$id_youtube',
+            WHERE NO_INDUK  = '$no_induk', 
+          ";             
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusMurid($no_induk) {
+    global $conn;
+
+    $query = "DELETE FROM murid WHERE NO_INDUK = '$no_induk'";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function tambahRuangKelas($data) {
+    global $conn;
+
+    $IDRUANG = htmlspecialchars($data["IDRUANG"]);
+    $NAMA_RUANG = htmlspecialchars($data["NAMA_RUANG"]);
+    $TIPE_RUANG = htmlspecialchars($data["TIPE_RUANG"]);
+    $UKURAN_RUANG = htmlspecialchars($data["UKURAN_RUANG"]);
+    $KAPASITAS_RUANG = htmlspecialchars($data["KAPASITAS_RUANG"]);
+    $JUMLAH_MEJA = htmlspecialchars($data["JUMLAH_MEJA"]);
+    $JUMLAH_KURIS = htmlspecialchars($data["JUMLAH_KURIS"]);
+    $KETERANGAN_RUANG = htmlspecialchars($data["KETERANGAN_RUANG"]);
+    $KELENGKAPAN_ALAT = htmlspecialchars($data["KELENGKAPAN_ALAT"]);
+    $RENOVASI_TERAKHIR = htmlspecialchars($data["RENOVASI_TERAKHIR"]);
+    // tambahkan datanya ke database
+    $query = "INSERT INTO ruang_kelas
+                VALUES
+              ('$IDRUANG', '$NAMA_RUANG', '$TIPE_RUANG', '$KAPASITAS_RUANG', '$JUMLAH_MEJA', '$JUMLAH_KURIS', '$KETERANGAN_RUANG', '$KELENGKAPAN_ALAT', '$RENOVASI_TERAKHIR')
+              ";
+    query($query);
+
+    return mysqli_affected_rows($conn);
+}
 ?>

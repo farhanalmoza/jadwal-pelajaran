@@ -1,33 +1,30 @@
 <?php
 require 'functions.php';
-
-$guru = query("SELECT * FROM guru_pengajar");
-// $mapel = query("SELECT * FROM mata_pelajaran"); 
 $ruang = query("SELECT * FROM ruang_kelas");
-$murid = query("SELECT * FROM murid");
 
-// ambil data id di url
-$KodeMapel = $_GET["id"];
+// hapus data
+$id_hapus = $_GET["hapus"];
 
-// query data berdasarkan id
-$mapel = query("SELECT * FROM mata_pelajaran WHERE KODE_MAPEL = '$KodeMapel'");
-
-// cek submit
-if ( isset($_POST["submit"]) ) {
-  // cek data berhasil diubah
-  if (ubahMataPelajaran($_POST) > 0) {
-    $status = 'Data berhasil diubah';
-    $message = 'Data mata pelajaran telah berhasil diubah ke dalam database';
+if (isset($id_hapus)) {
+  if ( hapusRuangKelas($id_hapus) > 0 ) {
+    $status = 'Data berhasil dihapus';
+    $message = 'Data ruang kelas telah berhasil dihapus di dalam database';
     echo "<script>
             let selectedType = 'bg-success';
             let toastPlacementShow = 1;
+            setTimeout(
+              function() {document.location.href = 'daftar-ruang-kelas.php';},
+            5000);
           </script>";
   } else {
-    $status = 'Data gagal diubah';
+    $status = 'Data gagal dihapus';
     $message = mysqli_error($conn);
     echo "<script>
             let selectedType = 'bg-danger';
             let toastPlacementShow = 1;
+            setTimeout(
+              function() {document.location.href = 'daftar-ruang-kelas.php';},
+            5000);
           </script>";
   }
 }
@@ -50,7 +47,7 @@ if ( isset($_POST["submit"]) ) {
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Ubah Jadwal Pelajaran | Kelompok 2</title>
+    <title>Daftar Ruang Kelas | Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -137,12 +134,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost://jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost://jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -157,14 +154,14 @@ if ( isset($_POST["submit"]) ) {
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Daftar mata pelajaran">Daftar</div>
+                <li class="menu-item active">
+                  <a href="http://localhost/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
+                    <div data-i18n="Daftar Mata pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Tambah mata pelajaran">Tambah</div>
+                  <a href="http://localhost/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
+                    <div data-i18n="Tambah Mata pelajaran">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -192,7 +189,7 @@ if ( isset($_POST["submit"]) ) {
             </li>
 
             <!-- Ruang Kelas -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Ruang Kelas</div>
@@ -200,13 +197,13 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  <a href="http://localhost/jadwal-pelajaran/daftar-ruang-kelas.php" class="menu-link">
+                    <div data-i18n="Daftar ruang kelas">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  <a href="http://localhost/jadwal-pelajaran/tambah-ruang-kelas.php" class="menu-link">
+                    <div data-i18n="Tambah ruang kelas">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -278,10 +275,16 @@ if ( isset($_POST["submit"]) ) {
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Mata Pelajaran /</span> Ubah Mata Pelajaran</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Ruang Kelas /</span> Daftar Ruang Kelas</h4>
 
               <!-- Toast with Placements -->
-              <div class="bs-toast toast toast-placement-ex m-2" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+              <div
+                class="bs-toast toast toast-placement-ex m-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-delay="2000"
+              >
                 <div class="toast-header">
                   <i class="bx bx-bell me-2"></i>
                   <div class="me-auto fw-semibold"><?= $status; ?></div>
@@ -291,70 +294,60 @@ if ( isset($_POST["submit"]) ) {
               </div>
               <!-- Toast with Placements -->
 
-              <!-- Form Ubah Mata Pelajaran -->
-              <div class="col-xxl">
-                <div class="card mb-4">
-                  <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Form Ubah Mata Pelajaran</h5>
-                  </div>
-                  <div class="card-body">
-                    <form method="post" action="">
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="KodeMapel">kode mapel</label>
-                        <div class="col-sm-10">
-                          <input type="text" class="form-control" id="KodeMapel" name="KodeMapel" placeholder="MP001" required />
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label for="id-NamaMapel" class="col-sm-2 col-form-label">Nama Mapel</label>
-                        <div class="col-sm-10">
-                          <input class="form-control" id="id-NamaMapel" name="id_NamaMapel" placeholder="Nama mapel..." required />
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label for="BidangMapel" class="col-sm-2 col-form-label">Bidang Mata Pelajaran</label>
-                        <div class="col-sm-10">
-                          <input class="form-control" list="BidangMapel" id="BidangMapel" name="BidangMapel" placeholder="Bidang Mata pelajaran..." required />
-                          
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label for="id-JenisMapel" class="col-sm-2 col-form-label">Jenis Mapel</label>
-                        <div class="col-sm-10">
-                          <input class="form-control" list="id-JenisMapel" id="id-JenisMapel" name="id_JenisMapel" placeholder="Jenis Mata Pelajaran..." required />
-                        </div>
-                      </div>
-                      <div class="row mb-3">
-                        <label for="TipeMapel" class="col-sm-2 col-form-label">Tipe Mapel</label>
-                        <div class="col-sm-10">
-                          <input class="form-control" list="TipeMapel" id="TipeMapel" name="TipeMapel" placeholder="Tipe Mata Pelajaran..." required />
-                
-                        </div>
-                      </div>
-
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="JumlahPertemuan">Jumlah Pertemuan</label>
-                        <div class="col-sm-10">
-                          <input type="number" class="form-control" id="JumlahPertemuan" name="JumlahPertemuan" required />
-                        </div>
-                      
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="DurasiMapel">Durasi Mapel</label>
-                        <div class="col-sm-10">
-                          <input type="number" class="form-control" id="DurasiMapel" name="DurasiMapel" placeholder= "Durasi Mata Pelajaran /jam"required />
-                        </div>
-                      </div>
-
-                      <div class="row justify-content-end">
-                        <div class="col-sm-10">
-                          <button type="submit" name="submit" class="btn btn-primary">Ubah</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
+              <!-- Tabel ruang kelas -->
+              <div class="card">
+                <h5 class="card-header">Daftar ruang kelas</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th> IDRUANG </th>              	
+                        <th> NAMA_RUANG </th>          
+                        <th> TIPE_RUANG </th>          
+                        <th> UKURAN_RUANG </th>        
+                        <th> KAPASITAS_RUANG </th>     
+                        <th> JUMLAH_MEJA </th>         
+                        <th> JUMLAH_KURIS </th>        
+                        <th> KETERANGAN_RUANG </th>    
+                        <th> KELENGKAPAN_ALAT </th>    
+                        <th> RENOVASI_TERAKHIR </th>   
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      <?php foreach($ruang as $ruang) : ?>
+                      <tr>
+                        <td><?= $ruang["IDRUANG"] ?></td>
+                        <td><?= $ruang["NAMA_RUANG"] ?></td>
+                        <td><?= $ruang["TIPE_RUANG"] ?></td>
+                        <td><?= $ruang["UKURAN_RUANG"] ?></td>
+                        <td><?= $ruang["KAPASITAS_RUANG"] ?></td>
+                        <td><?= $ruang["JUMLAH_MEJA"] ?></td>
+                        <td><?= $ruang["JUMLAH_KURIS"] ?></td>
+                        <td><?= $ruang["KETERANGAN_RUANG"] ?></td>
+                        <td><?= $ruang["KELENGKAPAN_ALAT"] ?></td>
+                        <td><?= $ruang["RENOVASI_TERAKHIR"] ?></td>
+                        <td>
+                          <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="./ubah-ruang-kelas.php?id=<?= $ruang["IDRUANG"] ?>"
+                                ><i class="bx bx-edit-alt me-1"></i> Ubah</a
+                              >
+                              <a class="dropdown-item" href="?hapus=<?= $ruang["IDRUANG"] ?>"
+                                ><i class="bx bx-trash me-1"></i> Hapus</a
+                              >
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <?php endforeach; ?>
+                    </tbody>
+                  </table>
                 </div>
               </div>
+              <!--/ Hoverable Table rows -->
             </div>
             <!-- / Content -->
 

@@ -2,28 +2,22 @@
 require 'functions.php';
 
 $guru = query("SELECT * FROM guru_pengajar");
-// $mapel = query("SELECT * FROM mata_pelajaran"); 
+$mapel = query("SELECT * FROM mata_pelajaran");
 $ruang = query("SELECT * FROM ruang_kelas");
 $murid = query("SELECT * FROM murid");
 
-// ambil data id di url
-$KodeMapel = $_GET["id"];
-
-// query data berdasarkan id
-$mapel = query("SELECT * FROM mata_pelajaran WHERE KODE_MAPEL = '$KodeMapel'");
-
 // cek submit
 if ( isset($_POST["submit"]) ) {
-  // cek data berhasil diubah
-  if (ubahMataPelajaran($_POST) > 0) {
-    $status = 'Data berhasil diubah';
-    $message = 'Data mata pelajaran telah berhasil diubah ke dalam database';
+  // cek data berhasil ditambahkan
+  if (tambahRuangKelas($_POST) > 0) {
+    $status = 'Data berhasil ditambahkan';
+    $message = 'Ruang kelas telah berhasil ditambahkan ke dalam database';
     echo "<script>
             let selectedType = 'bg-success';
             let toastPlacementShow = 1;
           </script>";
   } else {
-    $status = 'Data gagal diubah';
+    $status = 'Data gagal ditambahkan';
     $message = mysqli_error($conn);
     echo "<script>
             let selectedType = 'bg-danger';
@@ -31,7 +25,6 @@ if ( isset($_POST["submit"]) ) {
           </script>";
   }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +43,7 @@ if ( isset($_POST["submit"]) ) {
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Ubah Jadwal Pelajaran | Kelompok 2</title>
+    <title>Tambah Mata Pelajaran | Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -137,12 +130,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                <li class="menu-item active">
+                  <a href="http://localhost:/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -150,7 +143,7 @@ if ( isset($_POST["submit"]) ) {
             </li>
 
             <!-- Mata Pelajaran -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Mata Pelajaran</div>
@@ -158,12 +151,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
+                  <a href="http://localhost/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar mata pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="http://localhost:/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
+                <li class="menu-item active">
+                  <a href="http://localhost/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah mata pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -200,13 +193,13 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  <a href="http://localhost/jadwal-pelajaran/daftar-ruang-kelas.php" class="menu-link">
+                    <div data-i18n="Daftar ruang kelas">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  <a href="http://localhost/jadwal-pelajaran/tambah-ruang-kelas.php" class="menu-link">
+                    <div data-i18n="Tambah ruang kelas">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -278,10 +271,16 @@ if ( isset($_POST["submit"]) ) {
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Mata Pelajaran /</span> Ubah Mata Pelajaran</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Ruang Kelas /</span> Tambah Ruang Kelas</h4>
 
               <!-- Toast with Placements -->
-              <div class="bs-toast toast toast-placement-ex m-2" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+              <div
+                class="bs-toast toast toast-placement-ex m-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-delay="2000"
+              >
                 <div class="toast-header">
                   <i class="bx bx-bell me-2"></i>
                   <div class="me-auto fw-semibold"><?= $status; ?></div>
@@ -291,64 +290,84 @@ if ( isset($_POST["submit"]) ) {
               </div>
               <!-- Toast with Placements -->
 
-              <!-- Form Ubah Mata Pelajaran -->
+              <!-- Form Tambah Ruang Kelas -->
               <div class="col-xxl">
                 <div class="card mb-4">
                   <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Form Ubah Mata Pelajaran</h5>
+                    <h5 class="mb-0">Form Tambah Ruang Kelas</h5>
                   </div>
                   <div class="card-body">
                     <form method="post" action="">
                       <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="KodeMapel">kode mapel</label>
+                        <label class="col-sm-2 col-form-label" for="IDRUANG">ID Ruang</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="KodeMapel" name="KodeMapel" placeholder="MP001" required />
+                          <input type="text" class="form-control" id="IDRUANG" name="IDRUANG" placeholder="ID Ruang" required />
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="id-NamaMapel" class="col-sm-2 col-form-label">Nama Mapel</label>
+                        <label for="NAMA_RUANG" class="col-sm-2 col-form-label">Nama Ruang</label>
                         <div class="col-sm-10">
-                          <input class="form-control" id="id-NamaMapel" name="id_NamaMapel" placeholder="Nama mapel..." required />
+                          <input class="form-control" id="NAMA_RUANG" name="NAMA_RUANG" placeholder="Nama ruang kelas..." required />
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="BidangMapel" class="col-sm-2 col-form-label">Bidang Mata Pelajaran</label>
+                        <label for="TIPE_RUANG" class="col-sm-2 col-form-label">Tipe Ruang</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="BidangMapel" id="BidangMapel" name="BidangMapel" placeholder="Bidang Mata pelajaran..." required />
-                          
+                          <input class="form-control" list="TIPE_RUANG" id="TIPE_RUANG" name="TIPE_RUANG" placeholder="TIpe Ruang..." required />
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="id-JenisMapel" class="col-sm-2 col-form-label">Jenis Mapel</label>
+                        <label for="UKURAN_RUANG" class="col-sm-2 col-form-label">Ukuran Ruang</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="id-JenisMapel" id="id-JenisMapel" name="id_JenisMapel" placeholder="Jenis Mata Pelajaran..." required />
+                          <input class="form-control" list="UKURAN_RUANG" id="UKURAN_RUANG" name="UKURAN_RUANG" placeholder="Ukuran Ruang..." required />
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="TipeMapel" class="col-sm-2 col-form-label">Tipe Mapel</label>
+                        <label for="" class="col-sm-2 col-form-label">Kapasitas Ruang</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="TipeMapel" id="TipeMapel" name="TipeMapel" placeholder="Tipe Mata Pelajaran..." required />
+                          <input class="form-control" list="KAPASITAS_RUANG" id="KAPASITAS_RUANG" name="" placeholder="Kapasistas Ruang..." required />
                 
                         </div>
                       </div>
 
                       <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="JumlahPertemuan">Jumlah Pertemuan</label>
+                        <label class="col-sm-2 col-form-label" for="JUMLAH_MEJA">JUMLAH Meja</label>
                         <div class="col-sm-10">
-                          <input type="number" class="form-control" id="JumlahPertemuan" name="JumlahPertemuan" required />
+                          <input type="number" class="form-control" id="JUMLAH_MEJA" name="JUMLAH_MEJA" required />
                         </div>
                       
                       
                       <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="DurasiMapel">Durasi Mapel</label>
+                        <label class="col-sm-2 col-form-label" for="JUMLAH_KURIS">Jumlah Kursi</label>
                         <div class="col-sm-10">
-                          <input type="number" class="form-control" id="DurasiMapel" name="DurasiMapel" placeholder= "Durasi Mata Pelajaran /jam"required />
+                          <input type="number" class="form-control" id="JUMLAH_KURIS" name="JUMLAH_KURIS" placeholder= "Jumlah Kursi"required />
                         </div>
                       </div>
 
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="KETERANGAN_RUANG">Keterangan Ruang</label>
+                        <div class="col-sm-10">
+                          <input  class="form-control" id="KETERANGAN_RUANG" name="KETERANGAN_RUANG" placeholder= "KETERANGAN_RUANG"required />
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="KELENGKAPAN_ALAT">Kelengkapan Alat</label>
+                        <div class="col-sm-10">
+                          <input type="number" class="form-control" id="KELENGKAPAN_ALAT" name="KELENGKAPAN_ALAT" placeholder= "KELENGKAPAN_ALAT"required />
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="RENOVASI_TERAKHIR">Renovasi terakhir</label>
+                        <div class="col-sm-10">
+                          <input type="number" class="form-control" id="RENOVASI_TERAKHIR" name="RENOVASI_TERAKHIR" placeholder= "RENOVASI_TERAKHI"required />
+                        </div>
+                      </div>
+                  
                       <div class="row justify-content-end">
                         <div class="col-sm-10">
-                          <button type="submit" name="submit" class="btn btn-primary">Ubah</button>
+                          <button type="submit" name="submit" class="btn btn-primary">Tambah</button>
                         </div>
                       </div>
                     </form>

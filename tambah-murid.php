@@ -2,28 +2,22 @@
 require 'functions.php';
 
 $guru = query("SELECT * FROM guru_pengajar");
-// $mapel = query("SELECT * FROM mata_pelajaran"); 
+$mapel = query("SELECT * FROM mata_pelajaran");
 $ruang = query("SELECT * FROM ruang_kelas");
 $murid = query("SELECT * FROM murid");
 
-// ambil data id di url
-$KodeMapel = $_GET["id"];
-
-// query data berdasarkan id
-$mapel = query("SELECT * FROM mata_pelajaran WHERE KODE_MAPEL = '$KodeMapel'");
-
 // cek submit
 if ( isset($_POST["submit"]) ) {
-  // cek data berhasil diubah
-  if (ubahMataPelajaran($_POST) > 0) {
-    $status = 'Data berhasil diubah';
-    $message = 'Data mata pelajaran telah berhasil diubah ke dalam database';
+  // cek data berhasil ditambahkan
+  if (tambahMurid($_POST) > 0) {
+    $status = 'Data berhasil ditambahkan';
+    $message = 'Data Murid telah berhasil ditambahkan ke dalam database';
     echo "<script>
             let selectedType = 'bg-success';
             let toastPlacementShow = 1;
           </script>";
   } else {
-    $status = 'Data gagal diubah';
+    $status = 'Data gagal ditambahkan';
     $message = mysqli_error($conn);
     echo "<script>
             let selectedType = 'bg-danger';
@@ -31,7 +25,6 @@ if ( isset($_POST["submit"]) ) {
           </script>";
   }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +43,7 @@ if ( isset($_POST["submit"]) ) {
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Ubah Jadwal Pelajaran | Kelompok 2</title>
+    <title>Tambah Murid| Kelompok 2</title>
 
     <meta name="description" content="" />
 
@@ -129,7 +122,7 @@ if ( isset($_POST["submit"]) ) {
             </li>
 
             <!-- Jadwal Pelajaran -->
-            <li class="menu-item">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Layouts">Jadwal Pelajaran</div>
@@ -137,12 +130,12 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="http://localhost:8080/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
+                  <a href="http://localhost:/jadwal-pelajaran/daftar-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
-                <li class="menu-item">
-                  <a href="http://localhost:8080/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
+                <li class="menu-item active">
+                  <a href="http://localhost:/jadwal-pelajaran/tambah-jadwal-pelajaran.php" class="menu-link">
                     <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
@@ -159,12 +152,12 @@ if ( isset($_POST["submit"]) ) {
               <ul class="menu-sub">
                 <li class="menu-item">
                   <a href="http://localhost:/jadwal-pelajaran/daftar-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Daftar mata pelajaran">Daftar</div>
+                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
                   <a href="http://localhost:/jadwal-pelajaran/tambah-mata-pelajaran.php" class="menu-link">
-                    <div data-i18n="Tambah mata pelajaran">Tambah</div>
+                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -179,13 +172,13 @@ if ( isset($_POST["submit"]) ) {
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Daftar jadwal pelajaran">Daftar</div>
+                  <a href="http://localhost:/jadwal-pelajaran/daftar-murid.php" class="menu-link">
+                    <div data-i18n="Daftar Murid">Daftar</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="#" class="menu-link">
-                    <div data-i18n="Tambah jadwal pelajaran">Tambah</div>
+                  <a href="http://localhost:/jadwal-pelajaran/tambah-murid.php" class="menu-link">
+                    <div data-i18n="Tambah Murid">Tambah</div>
                   </a>
                 </li>
               </ul>
@@ -278,10 +271,16 @@ if ( isset($_POST["submit"]) ) {
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Mata Pelajaran /</span> Ubah Mata Pelajaran</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Murid /</span> Tambah Daftar Murid</h4>
 
               <!-- Toast with Placements -->
-              <div class="bs-toast toast toast-placement-ex m-2" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+              <div
+                class="bs-toast toast toast-placement-ex m-2"
+                role="alert"
+                aria-live="assertive"
+                aria-atomic="true"
+                data-delay="2000"
+              >
                 <div class="toast-header">
                   <i class="bx bx-bell me-2"></i>
                   <div class="me-auto fw-semibold"><?= $status; ?></div>
@@ -291,64 +290,121 @@ if ( isset($_POST["submit"]) ) {
               </div>
               <!-- Toast with Placements -->
 
-              <!-- Form Ubah Mata Pelajaran -->
+              <!-- Form Tambah Murid -->
               <div class="col-xxl">
                 <div class="card mb-4">
                   <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Form Ubah Mata Pelajaran</h5>
+                    <h5 class="mb-0">Form Tambah Murid</h5>
                   </div>
                   <div class="card-body">
                     <form method="post" action="">
                       <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="KodeMapel">kode mapel</label>
+                        <label class="col-sm-2 col-form-label" for="no-induk">NO INDUK</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control" id="KodeMapel" name="KodeMapel" placeholder="MP001" required />
+                          <input type="text" class="form-control" list="daftar-murid" id="no-induk" name="no_induk" placeholder="No induk murid.." required />
+                          <datalist id="daftar-murid">
+                            <?php foreach( $murid as $m ) : ?>
+                            <option value="<?= $m["NO_INDUK"]; ?>"></option>
+                            <?php endforeach; ?>
+                          </datalist>
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="id-NamaMapel" class="col-sm-2 col-form-label">Nama Mapel</label>
+                        <label for="nama-murid" class="col-sm-2 col-form-label">NAMA MURID</label>
                         <div class="col-sm-10">
-                          <input class="form-control" id="id-NamaMapel" name="id_NamaMapel" placeholder="Nama mapel..." required />
+                          <input class="form-control" id="id-murid" name="nama_murid" placeholder="Nama Murid..." required />
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="BidangMapel" class="col-sm-2 col-form-label">Bidang Mata Pelajaran</label>
+                        <label for="jen-kel" class="col-sm-2 col-form-label">JENIS KELAMIN</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="BidangMapel" id="BidangMapel" name="BidangMapel" placeholder="Bidang Mata pelajaran..." required />
-                          
+                          <input class="form-control" id="id-jeniskelamin" name="jen_kel" placeholder="Jenis Kelamin..." required />
+                          <option value="">- Jenis Kelamin -</option>
+                        <option value="Pria">Pria</option>
+                        <option value="Wanita">Wanita</option>
+                      </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="agama-murid" class="col-sm-2 col-form-label">AGAMA MURID</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id-agama" name="agama_murid" placeholder="Beragama..." required />
+                      </div>
+                      </div>
+                      <div class="row mb-3">
+                      <label for="alamat-murid" class="col-sm-2 col-form-label">ALAMAT RUMAH</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id-alamat" name="alamat_rumah" placeholder="Alamat Rumah..." required />                        
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="id-JenisMapel" class="col-sm-2 col-form-label">Jenis Mapel</label>
+                        <label for="tempat-lahir" class="col-sm-2 col-form-label">TEMPAT LAHIR</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="id-JenisMapel" id="id-JenisMapel" name="id_JenisMapel" placeholder="Jenis Mata Pelajaran..." required />
+                            <input class="form-control" id="id-tempat" name="tempat_lahir" placeholder="Tempat Lahir..." required />                        
+                      </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label for="tgl-lahir" class="col-sm-2 col-form-label">TANGGAL LAHIR</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="id-tgl" name="tanggal_lahir" placeholder="tanggal lahir..." required> />
+                      </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="email-murid">EMAIL MURID</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="id-email" name="email_murid" required />
                         </div>
                       </div>
                       <div class="row mb-3">
-                        <label for="TipeMapel" class="col-sm-2 col-form-label">Tipe Mapel</label>
+                        <label class="col-sm-2 col-form-label" for="no-hp">NO HP</label>
                         <div class="col-sm-10">
-                          <input class="form-control" list="TipeMapel" id="TipeMapel" name="TipeMapel" placeholder="Tipe Mata Pelajaran..." required />
-                
+                          <input class="form-control" id="id-hp" name="no_hp" required />
                         </div>
                       </div>
-
                       <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="JumlahPertemuan">Jumlah Pertemuan</label>
+                        <label class="col-sm-2 col-form-label" for="no-wa">NO WA</label>
                         <div class="col-sm-10">
-                          <input type="number" class="form-control" id="JumlahPertemuan" name="JumlahPertemuan" required />
-                        </div>
-                      
-                      
-                      <div class="row mb-3">
-                        <label class="col-sm-2 col-form-label" for="DurasiMapel">Durasi Mapel</label>
-                        <div class="col-sm-10">
-                          <input type="number" class="form-control" id="DurasiMapel" name="DurasiMapel" placeholder= "Durasi Mata Pelajaran /jam"required />
+                          <input class="form-control" id="id-wa" name="no_wa" required />
                         </div>
                       </div>
-
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id_telegram">ID TELEGRAM</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id_telegram" name="id_telegram" required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id_line">ID LINE</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id_line" name="id_line" required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id_facebook">ID FACEBOOK</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id_facebook" name="id_facebook" required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id_instagram">ID INSTAGRAM</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id_instagram" name="id_instagram" required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id_twitter">ID TWITTER</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id_twitter" name="id_twitter" required />
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="id_youtube">ID YOUTUBE</label>
+                        <div class="col-sm-10">
+                          <input class="form-control" id="id_youtube" name="id_youtube" required />
+                        </div>
+                      </div>
                       <div class="row justify-content-end">
                         <div class="col-sm-10">
-                          <button type="submit" name="submit" class="btn btn-primary">Ubah</button>
+                          <button type="submit" name="submit" class="btn btn-primary">Tambah</button>
                         </div>
                       </div>
                     </form>
